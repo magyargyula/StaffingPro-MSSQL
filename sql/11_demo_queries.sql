@@ -1,36 +1,36 @@
 /*===========================================================================
-  DEMO QUERIES ñ StaffingPro (portfolio)
-  CÈl: gyorsan megmutatni riportok, ¸zleti kontrollok, audit Ès sz·ml·z·s m˚kˆdÈsÈt.
+  DEMO QUERIES ‚Äì StaffingPro (portfolio)
+  C√©l: gyorsan megmutatni riportok, √ºzleti kontrollok, audit √©s sz√°ml√°z√°s m√ªk√∂d√©s√©t.
 ===========================================================================*/
 
--- 1) MegrendelÈsek betˆltˆttsÈge (FillRate): megmutatja, hogy a kÈrt lÈtsz·mhoz kÈpest
---    h·ny fı van tÈnylegesen hozz·rendelve (PLANNED/ACTIVE).
---    MiÈrt fontos? Kapacit·s-tervezÈs Ès operatÌv st·tusz riport.
+-- 1) Megrendel√©sek bet√∂lt√∂tts√©ge (FillRate): megmutatja, hogy a k√©rt l√©tsz√°mhoz k√©pest
+--    h√°ny f√µ van t√©nylegesen hozz√°rendelve (PLANNED/ACTIVE).
+--    Mi√©rt fontos? Kapacit√°s-tervez√©s √©s operat√≠v st√°tusz riport.
 SELECT TOP 10 *
 FROM ops.vOrderFillRate
 ORDER BY FillRate DESC;
 
 -----------------------------------------------------------------------------
 
--- 2) AktÌv kikˆzvetÌtÈsek: kik dolgoznak Èppen, hol Ès milyen megbÌz·son.
---    MiÈrt fontos? Napi operatÌv ·ttekintÈs (diszpÈcser/oper·ciÛ).
+-- 2) Akt√≠v kik√∂zvet√≠t√©sek: kik dolgoznak √©ppen, hol √©s milyen megb√≠z√°son.
+--    Mi√©rt fontos? Napi operat√≠v √°ttekint√©s (diszp√©cser/oper√°ci√≥).
 SELECT TOP 10 *
 FROM ops.vActiveAssignments
 ORDER BY StartDate DESC;
 
 ------------------------------------------------------------------------------
 
--- 3) Havi sz·ml·zhatÛ Ûr·k: ¸gyfelenkÈnt hÛnapra aggreg·lja a munkaÛr·kat
---    (pÛtlÈk szorzÛkkal, PayType.Multiplier).
---    MiÈrt fontos? Finance/controlling gyors havi kimutat·s.
+-- 3) Havi sz√°ml√°zhat√≥ √≥r√°k: √ºgyfelenk√©nt h√≥napra aggreg√°lja a munka√≥r√°kat
+--    (p√≥tl√©k szorz√≥kkal, PayType.Multiplier).
+--    Mi√©rt fontos? Finance/controlling gyors havi kimutat√°s.
 SELECT TOP 10 *
 FROM ops.vBillableHoursMonthly
 ORDER BY YearMonth DESC;
 
 ------------------------------------------------------------------------------
 
--- 4) LegutÛbbi sz·ml·k: egyszer˚ lista a sz·mlafej adataival.
---    MiÈrt fontos? sz·ml·z·si folyamat ellenırzÈse (ki·llÌt·s, fizetÈsi hat·ridı).
+-- 4) Legut√≥bbi sz√°ml√°k: egyszer√ª lista a sz√°mlafej adataival.
+--    Mi√©rt fontos? sz√°ml√°z√°si folyamat ellen√µrz√©se (ki√°ll√≠t√°s, fizet√©si hat√°rid√µ).
 SELECT TOP 10
        InvoiceNumber, TotalNetHuf, IssueDate, DueDate
 FROM ops.Invoice
@@ -38,8 +38,8 @@ ORDER BY InvoiceId DESC;
 
 -------------------------------------------------------------------------------
 
--- 5) Audit naplÛ (Order t·bla): ki/mikor/milyen m˚veletet vÈgzett Ès melyik kulcson.
---    MiÈrt fontos? v·ltoz·skˆvetÈs, hibakeresÈs, megfelelısÈg.
+-- 5) Audit napl√≥ (Order t√°bla): ki/mikor/milyen m√ªveletet v√©gzett √©s melyik kulcson.
+--    Mi√©rt fontos? v√°ltoz√°sk√∂vet√©s, hibakeres√©s, megfelel√µs√©g.
 SELECT TOP 10
        ChangeAt, ActionType, KeyValue
 FROM audit.ChangeLog
@@ -47,9 +47,9 @@ ORDER BY ChangeLogId DESC;
 
 -------------------------------------------------------------------------------
 
--- 6) "‹res" megrendelÈsek (nincs r· kioszt·s):
---    Azokat az Order-ˆket list·zza, amelyekhez 0 darab PLANNED/ACTIVE assignment tartozik.
---    MiÈrt fontos? operatÌv teendılista: mÈg nincs ember rendelve a megbÌz·sra.
+-- 6) "√úres" megrendel√©sek (nincs r√° kioszt√°s):
+--    Azokat az Order-√∂ket list√°zza, amelyekhez 0 darab PLANNED/ACTIVE assignment tartozik.
+--    Mi√©rt fontos? operat√≠v teend√µlista: m√©g nincs ember rendelve a megb√≠z√°sra.
 SELECT TOP 10
        o.OrderNumber,
        cc.Name AS ClientCompany,
@@ -67,9 +67,9 @@ ORDER BY o.StartDate ASC;
 
 --------------------------------------------------------------------------------
 
--- 7) "Top 5" munkav·llalÛ a timesheet alapj·n (elm˙lt 14 nap):
---    Megmutatja, kik dolgoztak a legtˆbbet az elm˙lt 2 hÈtben (szorzÛzott Ûr·kkal is).
---    MiÈrt fontos? terhelÈs/kapacit·s, payroll ellenırzÈs, egyszer˚ analytics.
+-- 7) "Top 5" munkav√°llal√≥ a timesheet alapj√°n (elm√∫lt 14 nap):
+--    Megmutatja, kik dolgoztak a legt√∂bbet az elm√∫lt 2 h√©tben (szorz√≥zott √≥r√°kkal is).
+--    Mi√©rt fontos? terhel√©s/kapacit√°s, payroll ellen√µrz√©s, egyszer√ª analytics.
 DECLARE @From date = CONVERT(date, GETDATE() - 14);
 DECLARE @To   date = CONVERT(date, GETDATE() - 1);
 
@@ -89,9 +89,9 @@ ORDER BY WeightedHours DESC;
 
 --------------------------------------------------------------------------------
 
--- 8) Sz·mla tÈtelek rÈszletezÈse (legutÛbbi sz·mla):
---    A legutolsÛ Invoice-hoz kilist·zza a tÈteleket Ès a vÈgˆsszeg ellenırzÈsÈt.
---    MiÈrt fontos? sz·ml·z·s transzparencia + TotalNetHuf valid·l·sa.
+-- 8) Sz√°mla t√©telek r√©szletez√©se (legut√≥bbi sz√°mla):
+--    A legutols√≥ Invoice-hoz kilist√°zza a t√©teleket √©s a v√©g√∂sszeg ellen√µrz√©s√©t.
+--    Mi√©rt fontos? sz√°ml√°z√°s transzparencia + TotalNetHuf valid√°l√°sa.
 DECLARE @LastInvoiceId int = (SELECT TOP 1 InvoiceId FROM ops.Invoice ORDER BY InvoiceId DESC);
 
 SELECT
@@ -106,7 +106,7 @@ JOIN ops.InvoiceLine il ON il.InvoiceId = i.InvoiceId
 WHERE i.InvoiceId = @LastInvoiceId
 ORDER BY il.InvoiceLineId;
 
--- Total ellenırzÈs: a tÈtelek ˆsszege = Invoice.TotalNetHuf?
+-- Total ellen√µrz√©s: a t√©telek √∂sszege = Invoice.TotalNetHuf?
 SELECT
     i.InvoiceNumber,
     StoredTotal = i.TotalNetHuf,
@@ -119,10 +119,10 @@ GROUP BY i.InvoiceNumber, i.TotalNetHuf;
 
 -------------------------------------------------------------------------------
 
--- 9) Timesheet adatminısÈg ellenırzÈs (pÈlda kontroll):
+-- 9) Timesheet adatmin√µs√©g ellen√µrz√©s (p√©lda kontroll):
 --    Megkeresi azokat a TimesheetLine sorokat, ahol nincs OrderId / AssignmentId,
---    vagyis a munkaÛra nincs egyÈrtelm˚en megbÌz·shoz kˆtve.
---    MiÈrt fontos? sz·ml·zhatÛs·g Ès adatminısÈg (hi·nyos kapcsol·sok).
+--    vagyis a munka√≥ra nincs egy√©rtelm√ªen megb√≠z√°shoz k√∂tve.
+--    Mi√©rt fontos? sz√°ml√°zhat√≥s√°g √©s adatmin√µs√©g (hi√°nyos kapcsol√°sok).
 SELECT TOP 20
        tl.TimesheetLineId,
        t.EmployeeId,
@@ -137,14 +137,14 @@ WHERE (tl.OrderId IS NULL OR tl.AssignmentId IS NULL)
 ORDER BY tl.WorkDate DESC;
 
 ---------------------------------------------------------------------------------
--- 10) PRO: ¡tfedı kikˆzvetÌtÈsek keresÈse (debug/report)
---    Elvileg a trigger (ops.tr_Assignment_NoOverlap) tiltja az ·tfedÈst PLANNED/ACTIVE
---    st·tuszban. Ez a lekÈrdezÈs mÈgis hasznos:
---      - ha rÈgi adatokbÛl migr·lsz,
---      - ha ideiglenesen kikapcsolt·k a triggert,
---      - ha audit/debug cÈlbÛl ellenıriznÈd a szab·ly ÈrvÈnyes¸lÈsÈt.
---    Mit csin·l? ÷sszep·rosÌtja ugyanazon EmployeeId-hez tartozÛ assignment sorokat,
---    Ès kisz˚ri azokat, ahol a d·tum-intervallumok ·tfedik egym·st.
+-- 10) √Åtfed√µ kik√∂zvet√≠t√©sek keres√©se (debug/report)
+--    Elvileg a trigger (ops.tr_Assignment_NoOverlap) tiltja az √°tfed√©st PLANNED/ACTIVE
+--    st√°tuszban. Ez a lek√©rdez√©s m√©gis hasznos:
+--      - ha r√©gi adatokb√≥l migr√°lsz,
+--      - ha ideiglenesen kikapcsolt√°k a triggert,
+--      - ha audit/debug c√©lb√≥l ellen√µrizn√©d a szab√°ly √©rv√©nyes√ºl√©s√©t.
+--    Mit csin√°l? √ñsszep√°ros√≠tja ugyanazon EmployeeId-hez tartoz√≥ assignment sorokat,
+--    √©s kisz√ªri azokat, ahol a d√°tum-intervallumok √°tfedik egym√°st.
 SELECT TOP 50
        e.EmployeeNumber,
        EmployeeName = CONCAT(p.FamilyName, N' ', p.GivenName),
@@ -163,7 +163,7 @@ SELECT TOP 50
 FROM ops.Assignment a1
 JOIN ops.Assignment a2
   ON a2.EmployeeId = a1.EmployeeId
- AND a2.AssignmentId > a1.AssignmentId              -- duplik·ciÛk elker¸lÈse
+ AND a2.AssignmentId > a1.AssignmentId              -- duplik√°ci√≥k elker√ºl√©se
 JOIN ref.AssignmentStatus s1 ON s1.AssignmentStatusId = a1.AssignmentStatusId
 JOIN ref.AssignmentStatus s2 ON s2.AssignmentStatusId = a2.AssignmentStatusId
 JOIN core.Employee e ON e.EmployeeId = a1.EmployeeId
@@ -171,23 +171,23 @@ JOIN core.Person p ON p.PersonId = e.PersonId
 JOIN ops.[Order] o1 ON o1.OrderId = a1.OrderId
 JOIN ops.[Order] o2 ON o2.OrderId = a2.OrderId
 WHERE
-    -- csak a relev·ns (munk·t Èrintı) st·tuszok
+    -- csak a relev√°ns (munk√°t √©rint√µ) st√°tuszok
     s1.Code IN ('PLANNED','ACTIVE')
     AND s2.Code IN ('PLANNED','ACTIVE')
-    -- ·tfedÈs feltÈtel: start1 <= end2 Ès start2 <= end1
+    -- √°tfed√©s felt√©tel: start1 <= end2 √©s start2 <= end1
     AND a1.StartDate <= a2.EndDate
     AND a2.StartDate <= a1.EndDate
 ORDER BY e.EmployeeNumber, a1.StartDate, a2.StartDate;
 
 --------------------------------------------------------------------------------
--- 11) PRO: Order st·tusz frissÌtÈs (OPEN -> FILLED) riport + frissÌtı utasÌt·s
---    ‹zleti logika: ha a PLANNED/ACTIVE assignment-ek sz·ma elÈri a
---    HeadcountRequested ÈrtÈket, akkor az Order tekinthetı "betˆltˆttnek".
---    Ez kÈt rÈszbıl ·ll:
---      (A) Riport: megmutatja mely orderˆk "betˆlthetık" (OPEN, de m·r elÈrtÈk a lÈtsz·mot)
---      (B) Update: tÈnylegesen ·t·llÌtja FILLED-re (DEMO-ban elıtte nÈzd meg a riportot)
+-- 11) Order st√°tusz friss√≠t√©s (OPEN -> FILLED) riport + friss√≠t√µ utas√≠t√°s
+--    √úzleti logika: ha a PLANNED/ACTIVE assignment-ek sz√°ma el√©ri a
+--    HeadcountRequested √©rt√©ket, akkor az Order tekinthet√µ "bet√∂lt√∂ttnek".
+--    Ez k√©t r√©szb√µl √°ll:
+--      (A) Riport: megmutatja mely order√∂k "bet√∂lthet√µk" (OPEN, de m√°r el√©rt√©k a l√©tsz√°mot)
+--      (B) Update: t√©nylegesen √°t√°ll√≠tja FILLED-re (DEMO-ban el√µtte n√©zd meg a riportot)
 
--- (A) Riport: mely OPEN orderˆk Èrik el a kÈrt lÈtsz·mot?
+-- (A) Riport: mely OPEN order√∂k √©rik el a k√©rt l√©tsz√°mot?
 DECLARE @OpenStatusId   tinyint = (SELECT OrderStatusId FROM ref.OrderStatus WHERE Code='OPEN');
 DECLARE @FilledStatusId tinyint = (SELECT OrderStatusId FROM ref.OrderStatus WHERE Code='FILLED');
 
@@ -210,7 +210,7 @@ GROUP BY o.OrderId, o.OrderNumber, cc.Name, o.HeadcountRequested
 HAVING COUNT(CASE WHEN ast.Code IN ('PLANNED','ACTIVE') THEN 1 END) >= o.HeadcountRequested
 ORDER BY o.OrderId DESC;
 
--- (B) FrissÌtÈs: OPEN -> FILLED azokn·l, akik elÈrtÈk a kÈrt lÈtsz·mot
+-- (B) Friss√≠t√©s: OPEN -> FILLED azokn√°l, akik el√©rt√©k a k√©rt l√©tsz√°mot
 UPDATE o
 SET o.OrderStatusId = @FilledStatusId
 FROM ops.[Order] o
@@ -225,7 +225,7 @@ WHERE o.OrderStatusId = @OpenStatusId
       HAVING COUNT(*) >= o.HeadcountRequested
   );
 
--- EllenırzÈs: mutassuk a legutÛbb FILLED-re ·llÌtott orderˆket
+-- Ellen√µrz√©s: mutassuk a legut√≥bb FILLED-re √°ll√≠tott order√∂ket
 SELECT TOP 10
        o.OrderNumber,
        os.Code AS OrderStatus,
